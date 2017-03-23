@@ -13,7 +13,8 @@ func TestPairs(t *testing.T) {
 
 	rate := pair.GetRates()
 
-	t.Logf("Pair: %v at %v", rate.Pair, rate.Rate)
+	t.Log("Pair: ", rate.Pair)
+	t.Log("Rate: ", rate.Rate)
 
 }
 
@@ -23,7 +24,8 @@ func TestLimits(t *testing.T) {
 
 	limits := pair.GetLimits()
 
-	t.Logf("Limits on Pair: %v LIMIT: %v", limits.Pair, limits.Limit)
+	t.Log("Pair: ", limits.Pair)
+	t.Log("Pair: ", limits.Limit)
 
 }
 
@@ -33,7 +35,11 @@ func TestMarketInfo(t *testing.T) {
 
 	info := pair.GetInfo()
 
-	t.Logf("Info Pair: %v | Min: %f | LIMIT: %f", info.Pair, info.Min, info.Limit)
+	t.Log("Pair: ", info.Pair)
+	t.Log("Min: ", info.Min)
+	t.Log("Miner Fee: ", info.MinerFee)
+	t.Log("Limit: ", info.Limit)
+	t.Log("Rate: ", info.Rate)
 
 }
 
@@ -47,9 +53,21 @@ func TestRecentTransactions(t *testing.T) {
 
 func TestDepositStatus(t *testing.T) {
 
-	status := DepositStatus("1L75eRMgeCwAxEjD1oWXjLgud9jxwxm34u")
+	status := DepositStatus("1JP7QWC9GbpKEHSvefygWk5woFy9xeQHKc")
 
-	t.Log(status.Status)
+	t.Log("Deposit Status: ", status.Status)
+
+	if status.Status == "complete" {
+
+	}
+
+	t.Log("Incoming Coin: ", status.IncomingCoin)
+	t.Log("Incoming Type: ", status.IncomingType)
+	t.Log("Outgoing Coin: ", status.OutgoingCoin)
+	t.Log("Outgoing Type: ", status.OutgoingType)
+	t.Log("Address: ", status.Address)
+	t.Log("Transaction ID: ", status.Transaction)
+	t.Log("Withdraw: ", status.Withdraw)
 
 }
 
@@ -64,17 +82,20 @@ func TestNewTransaction(t *testing.T) {
 
 	new := New{
 		Pair:        "eth_btc",
-		ToAddress:   "1L75eRMgeCwAxEjD1oWXjLgud9jxwxm34u",
+		ToAddress:   "16FdfRFVPUwiKAceRSqgEfn1tmB4sVUmLh",
 		FromAddress: "0xcf2f204aC8D7714990912fA422874371c001217D",
 	}
 
 	response := new.Shift()
 
-	t.Log("Send To Address: ", response.SendTo, "\n")
-	t.Log("Receiving at Address: ", response.ReturnTo, "\n")
-	t.Log("Receiving Type: ", response.ReturnType, "\n")
-	t.Log("Send Type: ", response.SendType, "\n")
-	t.Log("Send Type: ", response.ApiKey, "\n")
+	t.Log("Send To Address: ", response.SendTo)
+	t.Log("Send Type: ", response.SendType)
+	t.Log("Receiving at Address: ", response.ReturnTo)
+	t.Log("Receiving Type: ", response.ReturnType)
+	t.Log("Send Type: ", response.SendType)
+	t.Log("API Key: ", response.ApiKey)
+	t.Log("Public Data: ", response.Public)
+	t.Log("XrpDestTag: ", response.XrpDestTag)
 
 	newSendToAddress = response.SendTo
 
@@ -98,7 +119,7 @@ func TestNewFixedTransaction(t *testing.T) {
 	new := New{
 		Pair:        "eth_btc",
 		Amount:      0.25,
-		ToAddress:   "1L75eRMgeCwAxEjD1oWXjLgud9jxwxm34u",
+		ToAddress:   "16FdfRFVPUwiKAceRSqgEfn1tmB4sVUmLh",
 		FromAddress: "0xcf2f204aC8D7714990912fA422874371c001217D",
 	}
 
@@ -117,7 +138,7 @@ func TestNewFixedTransaction(t *testing.T) {
 
 func TestTimeRemaining(t *testing.T) {
 
-	status := TimeRemaining(newSendToAddress2)
+	status := TimeRemaining("1JP7QWC9GbpKEHSvefygWk5woFy9xeQHKc")
 
 	t.Log(status.Status)
 
