@@ -25,14 +25,16 @@ new := shapeshift.New{
 
 response := new.Shift()
 
+sendToAddress := response.SendTo
+
 fmt.Println("Send Ethereum to Address: ",response.SendTo)
 fmt.Println("Receiving Coin: ",response.ReturnType)
 ```
 
 ### Get Status of Transaction
-Once I sent some Ethereum to the given Ethereum address, I want to check the status of my ShapeShift transaction by inserting my 'ToAddress' above. (Address I want the Bitcoin to go)
+Once I sent some Ethereum to the given Ethereum address, I want to check the status of my ShapeShift transaction by inserting the Etheruem address 'sendToAddress' that ShapeShift gave me in previous function.
 ```go
-status := shapeshift.DepositStatus("16FdfRFVPUwiKAceRSqgEfn1tmB4sVUmLh")
+status := shapeshift.DepositStatus(sendToAddress)
 
 fmt.Println(status.Status)
 // no_deposits
