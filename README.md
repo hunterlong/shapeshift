@@ -1,4 +1,8 @@
-# ShapeShift API in Go Language
+<p align="center">
+  <img src="https://cdn.pbrd.co/images/MK2f4akQc.jpg" alt="shapeshift api golang"/>
+</p>
+
+# ShapeShift in Go Language
 
 ### Functions
 
