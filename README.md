@@ -5,6 +5,40 @@
 # ShapeShift in Go Language
 [![Build Status](https://travis-ci.org/hunterlong/shapeshift.svg?branch=master)](https://travis-ci.org/hunterlong/shapeshift)  [![Coverage Status](https://coveralls.io/repos/github/hunterlong/shapeshift/badge.svg?branch=master)](https://coveralls.io/github/hunterlong/shapeshift?branch=master) [![GoDoc](https://godoc.org/github.com/hunterlong/shapeshift?status.svg)](https://godoc.org/github.com/hunterlong/shapeshift) [![Go Report Card](https://goreportcard.com/badge/github.com/hunterlong/shapeshift)](https://goreportcard.com/report/github.com/hunterlong/shapeshift)
 
+This Go Language Package will allow you to use the ShapeShift API and convert your cryptocurrencies in your very own application. It includes most of the ShapeShift API requests listed on their references website.
+
+```go
+go get github.com/hunterlong/shapeshift
+```
+
+### Simple ShapeShift Transaction
+I want to convert Ethereum to Bitcoin. 
+```go
+new := shapeshift.New{
+	Pair: "eth_btc",
+	ToAddress: "1L75eRMgeCwAxEjD1oWXjLgud9jxwxm34u",
+       }
+
+response := new.Shift()
+
+fmt.Println("Send Bitcoin to Address: ",response.SendTo)
+fmt.Println("Receiving Coin: ",response.SendType)
+fmt.Println("Return Type: ", response.ReturnType)
+
+```
+
+### Get Status of Transaction
+```go
+Once I sent my Ethereum, I want to get the status of my ShapeShift transaction by inserting my ToAddress. (Address I want the Bitcoin to go)
+status := shapeshift.DepositStatus("1L75eRMgeCwAxEjD1oWXjLgud9jxwxm34u")
+
+fmt.Println(status.Status)
+// no_deposits
+// received
+// complete
+// failed
+```
+
 ### Functions
 
 :white_check_mark: Get Rate
