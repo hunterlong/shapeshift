@@ -42,7 +42,7 @@ type DepositStatusResponse struct {
 	Status       string `json:"status"`
 	Address      string `json:"address"`
 	Withdraw     string `json:"withdraw,omitempty"`
-	IncomingCoin string `json:"incomingCoin,omitempty"`
+	IncomingCoin float64 `json:"incomingCoin,omitempty"`
 	IncomingType string `json:"incomingType,omitempty"`
 	OutgoingCoin string `json:"outgoingCoin,omitempty"`
 	OutgoingType string `json:"outgoingType,omitempty"`
