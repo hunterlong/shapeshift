@@ -6,6 +6,7 @@ import (
 
 var newSendToAddress string
 var newSendToAddress2 string
+var newTranxId string
 
 func TestPairs(t *testing.T) {
 
@@ -13,7 +14,6 @@ func TestPairs(t *testing.T) {
 
 	rate := pair.GetRates()
 
-	t.Log("Pair: ", rate.Pair)
 	t.Log("Rate: ", rate.Rate)
 
 }
@@ -24,8 +24,7 @@ func TestLimits(t *testing.T) {
 
 	limits := pair.GetLimits()
 
-	t.Log("Pair: ", limits.Pair)
-	t.Log("Pair: ", limits.Limit)
+	t.Log("Limit: ", limits.Limit)
 
 }
 
@@ -45,7 +44,7 @@ func TestMarketInfo(t *testing.T) {
 
 func TestRecentTransactions(t *testing.T) {
 
-	recent := RecentTransactions()
+	recent := RecentTransactions("5")
 
 	t.Log(recent)
 
@@ -57,10 +56,6 @@ func TestDepositStatus(t *testing.T) {
 
 	t.Log("Deposit Status: ", status.Status)
 
-	if status.Status == "complete" {
-
-	}
-
 	t.Log("Incoming Coin: ", status.IncomingCoin)
 	t.Log("Incoming Type: ", status.IncomingType)
 	t.Log("Outgoing Coin: ", status.OutgoingCoin)
@@ -68,6 +63,12 @@ func TestDepositStatus(t *testing.T) {
 	t.Log("Address: ", status.Address)
 	t.Log("Transaction ID: ", status.Transaction)
 	t.Log("Withdraw: ", status.Withdraw)
+
+	if status.Status != "complete" {
+		t.Fail()
+	}
+
+	newTranxId = status.Transaction
 
 }
 
@@ -97,6 +98,10 @@ func TestNewTransaction(t *testing.T) {
 	t.Log("Public Data: ", response.Public)
 	t.Log("XrpDestTag: ", response.XrpDestTag)
 
+	if response.SendType != "ETH" || response.ReturnType != "BTC" {
+		t.Fail()
+	}
+
 	newSendToAddress = response.SendTo
 
 }
@@ -104,8 +109,8 @@ func TestNewTransaction(t *testing.T) {
 func TestEmailReceipt(t *testing.T) {
 
 	info := Receipt{
-		Email:         "user@awesome.com",
-		TransactionID: "owkdwodkkwokdwdw",
+		Email:         "info@socialeck.com",
+		TransactionID: newTranxId,
 	}
 
 	response := info.Send()
@@ -134,6 +139,14 @@ func TestNewFixedTransaction(t *testing.T) {
 	t.Log("Expiration: ", response.Expiration)
 
 	newSendToAddress2 = response.Deposit
+
+	if response.WithdrawalAmount != "0.25" {
+		t.Fail()
+	}
+
+	if response.WithdrawalAmount != "eth_btc" {
+		t.Fail()
+	}
 }
 
 func TestTimeRemaining(t *testing.T) {

@@ -132,8 +132,8 @@ func (p Pair) GetInfo() MarketInfoResponse {
 	return g
 }
 
-func RecentTransactions() RecentTranxResponse {
-	r := DoHttp("GET", "recenttx", "5")
+func RecentTransactions(count string) RecentTranxResponse {
+	r := DoHttp("GET", "recenttx", count)
 	var g RecentTranxResponse
 	json.Unmarshal(r, &g)
 	return g
