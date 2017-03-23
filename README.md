@@ -177,3 +177,8 @@ Allows vendors to get a list of all transactions that have ever been done using 
 
 ### :white_large_square: Get Transactions from Output Address
 Allows vendors to get a list of all transactions that have ever been sent to one of their addresses. The affilliate's PRIVATE KEY must be provided, and will only return transactions that were sent to output address AND were created using / linked to the affiliate's PUBLIC KEY. Please note that if the address is a ripple address and it includes the "?dt=destTagNUM" appended on the end, you will need to use the URIEncodeComponent() function on the address before sending it in as a param, to get a successful response.
+
+# License
+This golang package is built for the cryptocurrency community and is released with MIT license. 
+
+:thumbsup: :thumbsup: [ShapeShift.io](https://shapeshift.io) :thumbsup: :thumbsup:
