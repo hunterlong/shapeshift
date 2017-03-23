@@ -10,9 +10,12 @@ This Go Language Package will allow you to use the ShapeShift API and convert yo
 ```go
 go get github.com/hunterlong/shapeshift
 ```
+```go
+import "github.com/hunterlong/shapeshift"
+```
 
 ### Simple ShapeShift Transaction
-I want to convert Ethereum to Bitcoin. 
+I want to convert Ethereum to Bitcoin. The 'ToAddress' is my Bitcoin address. Once I run this, I'll get a Ethereum address from ShapeShift.
 ```go
 new := shapeshift.New{
 	Pair: "eth_btc",
@@ -21,15 +24,13 @@ new := shapeshift.New{
 
 response := new.Shift()
 
-fmt.Println("Send Bitcoin to Address: ",response.SendTo)
-fmt.Println("Receiving Coin: ",response.SendType)
-fmt.Println("Return Type: ", response.ReturnType)
-
+fmt.Println("Send Ethereum to Address: ",response.SendTo)
+fmt.Println("Receiving Coin: ",response.ReturnType)
 ```
 
 ### Get Status of Transaction
 ```go
-Once I sent my Ethereum, I want to get the status of my ShapeShift transaction by inserting my ToAddress. (Address I want the Bitcoin to go)
+Once I sent my Ethereum address, I want to check the status of my ShapeShift transaction by inserting my 'ToAddress' above. (Address I want the Bitcoin to go)
 status := shapeshift.DepositStatus("1L75eRMgeCwAxEjD1oWXjLgud9jxwxm34u")
 
 fmt.Println(status.Status)
@@ -40,6 +41,7 @@ fmt.Println(status.Status)
 ```
 
 ### Functions
+The other ShapeShift API requests are available for you to use. 
 
 :white_check_mark: Get Rate
 ```go
