@@ -188,6 +188,13 @@ btc, ltc, ppc, drk, doge, nmc, ftc, blk, nxt, btcd, qrk, rdd, nbt, bts, bitusd, 
 
 All requests are only available via HTTPS, in the interest of security best practices we do not support API calls over HTTP.
 
+### Package Useful? :beer: :bug:
+If this package saved you some time, or if you're excited to make that next crypto-bot, feel free to throw some coins my way. If you see an issue with this golang package, please submit a pull request. 
+```
+ETH: 0x9741C5522B85E195B92C71CE29B54A4C99D76c13
+BTC: 16FdfRFVPUwiKAceRSqgEfn1tmB4sVUmLh
+```
+
 # License
 This golang package is built for the cryptocurrency community and is released with MIT license. 
 
