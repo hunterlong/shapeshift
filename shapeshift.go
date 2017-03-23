@@ -106,6 +106,14 @@ func TimeRemaining(addr string) TimeRemainingResponse {
 }
 
 
+type ReceiptResponse struct {
+	Email struct {
+		      Status string `json:"status"`
+		      Message string `json:"message"`
+	      } `json:"email"`
+}
+
+
 func Coins() CoinsResponse {
 	r := DoHttp("GET", "getcoins", "")
 	fmt.Println(string(r))
@@ -115,6 +123,30 @@ func Coins() CoinsResponse {
 }
 
 
+func (r Receipt) Send() ReceiptResponse {
+	q := DoPostHttp("POST", "mail", r)
+	fmt.Println(string(q))
+	var g ReceiptResponse
+	json.Unmarshal(q, &g)
+	return g
+}
+
+type Receipt struct {
+	Email string `json:"email"`
+	TransactionID string `json:"txid"`
+}
+
+type CancelResponse struct {
+	Success string `json:"success,omitempty"`
+	Error string `json:"error,omitempty"`
+}
+
+
+type Address struct {
+	Id string `json:"address"`
+
+}
+
 type New struct {
 	Pair string `json:"pair"`
 	ToAddress string `json:"withdrawal"`
@@ -122,6 +154,7 @@ type New struct {
 	DestTag string `json:"destTag,omitempty"`
 	rsAddress string `json:"rsAddress,omitempty"`
 	ApiKey string `json:"apiKey,omitempty"`
+	Amount float64 `json:"amount,omitempty"`
 }
 
 type NewTransactionResponse struct {
@@ -134,6 +167,25 @@ type NewTransactionResponse struct {
 	ApiKey string `json:"apiPubKey"`
 }
 
+type FixedTransactionResponse struct {
+	Response NewFixedTransactionResponse `json:"success"`
+}
+
+type NewFixedTransactionResponse struct {
+	OrderID string `json:"orderId"`
+	Pair string `json:"pair"`
+	Withdrawal string `json:"withdrawal"`
+	WithdrawalAmount string `json:"withdrawalAmount"`
+	Deposit string `json:"deposit"`
+	DepositAmount string `json:"depositAmount"`
+	Expiration int64 `json:"expiration"`
+	QuotedRate string `json:"quotedRate"`
+	MaxLimit float64 `json:"maxLimit"`
+	ReturnAddress string `json:"returnAddress"`
+	APIPubKey string `json:"apiPubKey"`
+	MinerFee string `json:"minerFee"`
+}
+
 func (n New) Shift() NewTransactionResponse {
 	r := DoPostHttp("POST", "shift", n)
 	fmt.Println(string(r))
@@ -142,8 +194,24 @@ func (n New) Shift() NewTransactionResponse {
 	return g
 }
 
+func (n New) FixedShift() NewFixedTransactionResponse {
+	r := DoPostHttp("POST", "sendamount", n)
+	fmt.Println(string(r))
+	var g FixedTransactionResponse
+	json.Unmarshal(r, &g)
+	return g.Response
+}
 
-func DoPostHttp(method string, apimethod string, data New) []byte {
+func (n Address) Cancel() CancelResponse {
+	r := DoPostHttp("POST", "cancelpending", n)
+	fmt.Println(string(r))
+	var g CancelResponse
+	json.Unmarshal(r, &g)
+	return g
+}
+
+
+func DoPostHttp(method string, apimethod string, data interface{}) []byte {
 	new, _ := json.Marshal(data)
 	fmt.Println("Sending ", string(new))
 	req, err := http.NewRequest(method, apiUrl+"/"+apimethod, bytes.NewBuffer(new))
