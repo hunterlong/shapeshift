@@ -41,6 +41,8 @@ fmt.Println("XrpDestTag: ", response.XrpDestTag)
 # Get Status of Transaction
 Once I sent some Ethereum to the given Ethereum address, I want to check the status of my ShapeShift transaction by inserting the Etheruem address 'sendToAddress' that ShapeShift gave me in previous function.
 ```go
+var newTransactionId string
+
 status := shapeshift.DepositStatus(sendToAddress)
 
 fmt.Println(status.Status)
@@ -57,10 +59,24 @@ if status.Status == "complete" {
 	fmt.Println("Address: ", status.Address)
 	fmt.Println("Transaction ID: ", status.Transaction)
 	fmt.Println("Withdraw: ", status.Withdraw)
+	
+	newTransactionId = status.Transaction
+	// saving transaction ID so i can send a receipt
 }
 ```
 
-# Functions
+# Send an Email Receipt
+Want to send a receipt of this transaction? Just include an email address and the transaction ID affiliated with the ShapeShift transaction. 
+```go
+receipt := shapeshift.Receipt{
+	Email:         "user@myemailer.com",
+	TransactionID: newTransactionId,
+     }
+
+response := receipt.Send()
+```
+
+# Additional Functions
 The other ShapeShift API requests are available for you to use. 
 
 ### :white_check_mark: Get Rate
