@@ -14,7 +14,7 @@ go get github.com/hunterlong/shapeshift
 import "github.com/hunterlong/shapeshift"
 ```
 
-### Simple ShapeShift Transaction
+# New ShapeShift Transaction
 I want to convert Ethereum to Bitcoin. The 'ToAddress' is my Bitcoin address. Once I run this, I'll get a Ethereum address from ShapeShift.
 ```go
 new := shapeshift.New{
@@ -31,7 +31,7 @@ fmt.Println("Send Ethereum to Address: ",response.SendTo)
 fmt.Println("Receiving Coin: ",response.ReturnType)
 ```
 
-### Get Status of Transaction
+# Get Status of Transaction
 Once I sent some Ethereum to the given Ethereum address, I want to check the status of my ShapeShift transaction by inserting the Etheruem address 'sendToAddress' that ShapeShift gave me in previous function.
 ```go
 status := shapeshift.DepositStatus(sendToAddress)
