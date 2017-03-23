@@ -178,6 +178,16 @@ Allows vendors to get a list of all transactions that have ever been done using 
 ### :white_large_square: Get Transactions from Output Address
 Allows vendors to get a list of all transactions that have ever been sent to one of their addresses. The affilliate's PRIVATE KEY must be provided, and will only return transactions that were sent to output address AND were created using / linked to the affiliate's PUBLIC KEY. Please note that if the address is a ripple address and it includes the "?dt=destTagNUM" appended on the end, you will need to use the URIEncodeComponent() function on the address before sending it in as a param, to get a successful response.
 
+# Coin Pairs
+Many of the requests require a 'coin pair'. A coin pair is of the format deposit_withdrawal. Example: 'btc_ltc'. Valid pairs are any combination of the below listed valid coins.* The list will grow as we add more:
+```
+btc, ltc, ppc, drk, doge, nmc, ftc, blk, nxt, btcd, qrk, rdd, nbt, bts, bitusd, xcp, xmr
+```
+[ShapeShift Coins](https://shapeshift.io/#/coins)
+* If a particular coin goes offline any pairs using it will return a message stating that pair is temporarily unavailable.
+
+All requests are only available via HTTPS, in the interest of security best practices we do not support API calls over HTTP.
+
 # License
 This golang package is built for the cryptocurrency community and is released with MIT license. 
 
