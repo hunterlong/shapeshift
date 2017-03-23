@@ -72,7 +72,7 @@ type New struct {
 	ToAddress   string  `json:"withdrawal"`
 	FromAddress string  `json:"returnAddress,omitempty"`
 	DestTag     string  `json:"destTag,omitempty"`
-	rsAddress   string  `json:"rsAddress,omitempty"`
+	RsAddress   string  `json:"rsAddress,omitempty"`
 	ApiKey      string  `json:"apiKey,omitempty"`
 	Amount      float64 `json:"amount,omitempty"`
 }
