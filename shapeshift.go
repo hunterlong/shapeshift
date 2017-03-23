@@ -39,15 +39,15 @@ type RecentTranxResponse []struct {
 }
 
 type DepositStatusResponse struct {
-	Status       string `json:"status"`
-	Address      string `json:"address"`
-	Withdraw     string `json:"withdraw,omitempty"`
+	Status       string  `json:"status"`
+	Address      string  `json:"address"`
+	Withdraw     string  `json:"withdraw,omitempty"`
 	IncomingCoin float64 `json:"incomingCoin,omitempty"`
-	IncomingType string `json:"incomingType,omitempty"`
-	OutgoingCoin string `json:"outgoingCoin,omitempty"`
-	OutgoingType string `json:"outgoingType,omitempty"`
-	Transaction  string `json:"transaction,omitempty"`
-	Error        string `json:"error,omitempty"`
+	IncomingType string  `json:"incomingType,omitempty"`
+	OutgoingCoin string  `json:"outgoingCoin,omitempty"`
+	OutgoingType string  `json:"outgoingType,omitempty"`
+	Transaction  string  `json:"transaction,omitempty"`
+	Error        string  `json:"error,omitempty"`
 }
 
 type CoinsResponse struct {
