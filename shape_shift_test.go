@@ -71,6 +71,8 @@ func TestNewTransaction(t *testing.T) {
 	response := new.Shift()
 
 	t.Log("Send To Address: ", response.SendTo, "\n")
+	t.Log("Receiving at Address: ", response.ReturnTo, "\n")
+	t.Log("Receiving Type: ", response.ReturnType, "\n")
 	t.Log("Send Type: ", response.SendType, "\n")
 	t.Log("Send Type: ", response.ApiKey, "\n")
 
