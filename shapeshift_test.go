@@ -140,11 +140,15 @@ func TestNewFixedTransaction(t *testing.T) {
 
 	newSendToAddress2 = response.Deposit
 
+	if response.Withdrawal != "16FdfRFVPUwiKAceRSqgEfn1tmB4sVUmLh" {
+		t.Fail()
+	}
+
 	if response.WithdrawalAmount != "0.25" {
 		t.Fail()
 	}
 
-	if response.WithdrawalAmount != "eth_btc" {
+	if response.Pair != "eth_btc" {
 		t.Fail()
 	}
 }
