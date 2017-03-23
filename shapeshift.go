@@ -1,15 +1,14 @@
 package shapeshift
 
 import (
-	"net/http"
 	"bytes"
-	"io/ioutil"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"net/http"
 )
 
-var apiUrl string = "https://shapeshift.io";
-
+var apiUrl string = "https://shapeshift.io"
 
 type Pair struct {
 	Name string
@@ -21,46 +20,43 @@ type RateResponse struct {
 }
 
 type LimitResponse struct {
-	Pair string `json:"pair"`
+	Pair  string `json:"pair"`
 	Limit string `json:"limit"`
 }
 
 type MarketInfoResponse struct {
-	Pair string `json:"pair"`
-	Rate float64 `json:"rate,omitempty"`
-	Limit float64 `json:"limit,omitempty"`
-	Min float64 `json:"min,omitempty"`
+	Pair     string  `json:"pair"`
+	Rate     float64 `json:"rate,omitempty"`
+	Limit    float64 `json:"limit,omitempty"`
+	Min      float64 `json:"min,omitempty"`
 	MinerFee float64 `json:"minerFee,omitempty"`
 }
 
-
 type RecentTranxResponse []struct {
-	CurIn string `json:"curIn"`
-	CurOut string `json:"curOut"`
+	CurIn     string  `json:"curIn"`
+	CurOut    string  `json:"curOut"`
 	Timestamp float64 `json:"timestamp"`
-	Amount float64 `json:"amount"`
+	Amount    float64 `json:"amount"`
 }
 
-
 type DepositStatusResponse struct {
-	Status string `json:"status"`
-	Address string `json:"address"`
-	Withdraw string `json:"withdraw,omitempty"`
+	Status       string `json:"status"`
+	Address      string `json:"address"`
+	Withdraw     string `json:"withdraw,omitempty"`
 	IncomingCoin string `json:"incomingCoin,omitempty"`
 	IncomingType string `json:"incomingType,omitempty"`
 	OutgoingCoin string `json:"outgoingCoin,omitempty"`
 	OutgoingType string `json:"outgoingType,omitempty"`
-	Transaction string `json:"transaction,omitempty"`
-	Error string `json:"error,omitempty"`
+	Transaction  string `json:"transaction,omitempty"`
+	Error        string `json:"error,omitempty"`
 }
 
 type CoinsResponse struct {
-
 }
 
 type TimeRemainingResponse struct {
-	Status string `json:"status"`
-	Seconds int `json:"seconds_remaining"`
+	Status  string `json:"status"`
+	Seconds int    `json:"seconds_remaining"`
 }
 
 func (p Pair) GetRates() RateResponse {
@@ -105,14 +101,12 @@ func TimeRemaining(addr string) TimeRemainingResponse {
 	return g
 }
 
-
 type ReceiptResponse struct {
 	Email struct {
-		      Status string `json:"status"`
-		      Message string `json:"message"`
-	      } `json:"email"`
+		Status  string `json:"status"`
+		Message string `json:"message"`
+	} `json:"email"`
 }
-
 
 func Coins() CoinsResponse {
 	r := DoHttp("GET", "getcoins", "")
@@ -121,7 +115,6 @@ func Coins() CoinsResponse {
 	json.Unmarshal(r, &g)
 	return g
 }
-
 
 func (r Receipt) Send() ReceiptResponse {
 	q := DoPostHttp("POST", "mail", r)
@@ -132,39 +125,37 @@ func (r Receipt) Send() ReceiptResponse {
 }
 
 type Receipt struct {
-	Email string `json:"email"`
+	Email         string `json:"email"`
 	TransactionID string `json:"txid"`
 }
 
 type CancelResponse struct {
 	Success string `json:"success,omitempty"`
-	Error string `json:"error,omitempty"`
+	Error   string `json:"error,omitempty"`
 }
-
 
 type Address struct {
 	Id string `json:"address"`
-
 }
 
 type New struct {
-	Pair string `json:"pair"`
-	ToAddress string `json:"withdrawal"`
-	FromAddress string `json:"returnAddress,omitempty"`
-	DestTag string `json:"destTag,omitempty"`
-	rsAddress string `json:"rsAddress,omitempty"`
-	ApiKey string `json:"apiKey,omitempty"`
-	Amount float64 `json:"amount,omitempty"`
+	Pair        string  `json:"pair"`
+	ToAddress   string  `json:"withdrawal"`
+	FromAddress string  `json:"returnAddress,omitempty"`
+	DestTag     string  `json:"destTag,omitempty"`
+	rsAddress   string  `json:"rsAddress,omitempty"`
+	ApiKey      string  `json:"apiKey,omitempty"`
+	Amount      float64 `json:"amount,omitempty"`
 }
 
 type NewTransactionResponse struct {
-	SendTo string `json:"deposit"`
-	SendType string `json:"depositType"`
-	ReturnTo string `json:"withdrawal"`
+	SendTo     string `json:"deposit"`
+	SendType   string `json:"depositType"`
+	ReturnTo   string `json:"withdrawal"`
 	ReturnType string `json:"withdrawalType"`
-	Public string `json:"public"`
+	Public     string `json:"public"`
 	XrpDestTag string `json:"xrpDestTag"`
-	ApiKey string `json:"apiPubKey"`
+	ApiKey     string `json:"apiPubKey"`
 }
 
 type FixedTransactionResponse struct {
@@ -172,18 +163,18 @@ type FixedTransactionResponse struct {
 }
 
 type NewFixedTransactionResponse struct {
-	OrderID string `json:"orderId"`
-	Pair string `json:"pair"`
-	Withdrawal string `json:"withdrawal"`
-	WithdrawalAmount string `json:"withdrawalAmount"`
-	Deposit string `json:"deposit"`
-	DepositAmount string `json:"depositAmount"`
-	Expiration int64 `json:"expiration"`
-	QuotedRate string `json:"quotedRate"`
-	MaxLimit float64 `json:"maxLimit"`
-	ReturnAddress string `json:"returnAddress"`
-	APIPubKey string `json:"apiPubKey"`
-	MinerFee string `json:"minerFee"`
+	OrderID          string  `json:"orderId"`
+	Pair             string  `json:"pair"`
+	Withdrawal       string  `json:"withdrawal"`
+	WithdrawalAmount string  `json:"withdrawalAmount"`
+	Deposit          string  `json:"deposit"`
+	DepositAmount    string  `json:"depositAmount"`
+	Expiration       int64   `json:"expiration"`
+	QuotedRate       string  `json:"quotedRate"`
+	MaxLimit         float64 `json:"maxLimit"`
+	ReturnAddress    string  `json:"returnAddress"`
+	APIPubKey        string  `json:"apiPubKey"`
+	MinerFee         string  `json:"minerFee"`
 }
 
 func (n New) Shift() NewTransactionResponse {
@@ -210,7 +201,6 @@ func (n Address) Cancel() CancelResponse {
 	return g
 }
 
-
 func DoPostHttp(method string, apimethod string, data interface{}) []byte {
 	new, _ := json.Marshal(data)
 	fmt.Println("Sending ", string(new))
@@ -226,7 +216,6 @@ func DoPostHttp(method string, apimethod string, data interface{}) []byte {
 	body = bytes.TrimPrefix(body, []byte("\xef\xbb\xbf"))
 	return body
 }
-
 
 func DoHttp(method string, apimethod string, url string) []byte {
 	req, err := http.NewRequest(method, apiUrl+"/"+apimethod+"/"+url, bytes.NewBuffer([]byte("")))
