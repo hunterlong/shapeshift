@@ -5,7 +5,7 @@
 # ShapeShift in Go Language
 [![Build Status](https://travis-ci.org/hunterlong/shapeshift.svg?branch=master)](https://travis-ci.org/hunterlong/shapeshift)  [![Coverage Status](https://coveralls.io/repos/github/hunterlong/shapeshift/badge.svg?branch=master)](https://coveralls.io/github/hunterlong/shapeshift?branch=master) [![GoDoc](https://godoc.org/github.com/hunterlong/shapeshift?status.svg)](https://godoc.org/github.com/hunterlong/shapeshift) [![Go Report Card](https://goreportcard.com/badge/github.com/hunterlong/shapeshift)](https://goreportcard.com/report/github.com/hunterlong/shapeshift)
 
-This Go Language Package will allow you to use the ShapeShift API and convert your cryptocurrencies in your very own application. It includes most of the ShapeShift API requests listed on their references website.
+This Go Language Package will allow you to use the [ShapeShift API](https://info.shapeshift.io/) and convert your cryptocurrencies in your very own application. It includes most of the ShapeShift API requests listed on their references website. Below you'll find a perfect example of a new ShapeShift transaction.
 
 ```go
 go get github.com/hunterlong/shapeshift
