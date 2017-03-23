@@ -19,7 +19,8 @@ I want to convert Ethereum to Bitcoin. The 'ToAddress' is my Bitcoin address. On
 ```go
 new := shapeshift.New{
 	Pair: "eth_btc",
-	ToAddress: "1L75eRMgeCwAxEjD1oWXjLgud9jxwxm34u",
+	ToAddress: "16FdfRFVPUwiKAceRSqgEfn1tmB4sVUmLh",
+	// FromAddress: "0xcf2f204aC8D7714990912fA422874371c001217D",  (Optional Return To Ethereum Address)
        }
 
 response := new.Shift()
@@ -31,7 +32,7 @@ fmt.Println("Receiving Coin: ",response.ReturnType)
 ### Get Status of Transaction
 ```go
 Once I sent my Ethereum address, I want to check the status of my ShapeShift transaction by inserting my 'ToAddress' above. (Address I want the Bitcoin to go)
-status := shapeshift.DepositStatus("1L75eRMgeCwAxEjD1oWXjLgud9jxwxm34u")
+status := shapeshift.DepositStatus("16FdfRFVPUwiKAceRSqgEfn1tmB4sVUmLh")
 
 fmt.Println(status.Status)
 // no_deposits
@@ -78,14 +79,14 @@ t.Log(recent)
 ```
 :white_check_mark: Deposit Address Status
 ```go
-status := DepositStatus("1L75eRMgeCwAxEjD1oWXjLgud9jxwxm34u")
+status := DepositStatus("16FdfRFVPUwiKAceRSqgEfn1tmB4sVUmLh")
 
 t.Log(status.Status)
 ```
 
 :white_check_mark: Time Remaining on Fixed Transaction Amount
 ```go
-status := TimeRemaining("1L75eRMgeCwAxEjD1oWXjLgud9jxwxm34u")
+status := TimeRemaining("16FdfRFVPUwiKAceRSqgEfn1tmB4sVUmLh")
 
 t.Log(status.Status)
 ```
@@ -103,7 +104,7 @@ t.Log(coins)
 ```go
 new := New{
 		Pair: "eth_btc",
-		ToAddress: "1L75eRMgeCwAxEjD1oWXjLgud9jxwxm34u",
+		ToAddress: "16FdfRFVPUwiKAceRSqgEfn1tmB4sVUmLh",
 		FromAddress: "0xcf2f204aC8D7714990912fA422874371c001217D",
 	}
 
@@ -131,7 +132,7 @@ t.Log(response)
 new := New{
 		Pair: "eth_btc",
 		Amount: 0.25,
-		ToAddress: "1L75eRMgeCwAxEjD1oWXjLgud9jxwxm34u",
+		ToAddress: "16FdfRFVPUwiKAceRSqgEfn1tmB4sVUmLh",
 		FromAddress: "0xcf2f204aC8D7714990912fA422874371c001217D",
 	}
 
