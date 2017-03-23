@@ -69,8 +69,9 @@ func TestGetSupportedCoins(t *testing.T) {
 func TestNewTransaction(t *testing.T) {
 
 	new := New{
-		Pair: "btc_eth",
+		Pair: "eth_btc",
 		ToAddress: "1L75eRMgeCwAxEjD1oWXjLgud9jxwxm34u",
+		FromAddress: "152f1muMCNa7goXYhYAQC61hxEgGacmncB",
 	}
 
 	response := new.Shift()
