@@ -118,7 +118,7 @@ func Coins() CoinsResponse {
 type New struct {
 	Pair string `json:"pair"`
 	ToAddress string `json:"withdrawal"`
-	FromAddress string `json:"returnaddress,omitempty"`
+	FromAddress string `json:"returnAddress,omitempty"`
 	DestTag string `json:"destTag,omitempty"`
 	rsAddress string `json:"rsAddress,omitempty"`
 	ApiKey string `json:"apiKey,omitempty"`
@@ -146,7 +146,8 @@ func (n New) Shift() NewTransactionResponse {
 func DoPostHttp(method string, apimethod string, data New) []byte {
 	new, _ := json.Marshal(data)
 	fmt.Println("Sending ", string(new))
-	req, err := http.NewRequest(method, apiUrl+"/"+apimethod, bytes.NewBuffer([]byte(string(new))))
+	req, err := http.NewRequest(method, apiUrl+"/"+apimethod, bytes.NewBuffer(new))
+	req.Header.Set("Content-Type", "application/json")
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {

@@ -20,7 +20,7 @@
 
 ### Primary Requests
 
-:white_large_square: Create New Transaction
+:white_check_mark: Create New Transaction
 
 :white_large_square: Request Email Receipt
 

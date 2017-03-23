@@ -71,7 +71,7 @@ func TestNewTransaction(t *testing.T) {
 	new := New{
 		Pair: "eth_btc",
 		ToAddress: "1L75eRMgeCwAxEjD1oWXjLgud9jxwxm34u",
-		FromAddress: "152f1muMCNa7goXYhYAQC61hxEgGacmncB",
+		FromAddress: "0xcf2f204aC8D7714990912fA422874371c001217D",
 	}
 
 	response := new.Shift()
