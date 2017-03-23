@@ -26,9 +26,16 @@ new := shapeshift.New{
 response := new.Shift()
 
 sendToAddress := response.SendTo
+// i will send Ether to this address
 
-fmt.Println("Send Ethereum to Address: ",response.SendTo)
-fmt.Println("Receiving Coin: ",response.ReturnType)
+fmt.Println("Send To Address: ", sendToAddress)
+fmt.Println("Send Type: ", response.SendType)
+fmt.Println("Receiving at Address: ", response.ReturnTo)
+fmt.Println("Receiving Type: ", response.ReturnType)
+fmt.Println("Send Type: ", response.SendType)
+fmt.Println("API Key: ", response.ApiKey)
+fmt.Println("Public Data: ", response.Public)
+fmt.Println("XrpDestTag: ", response.XrpDestTag)
 ```
 
 # Get Status of Transaction
@@ -41,6 +48,16 @@ fmt.Println(status.Status)
 // received
 // complete
 // failed
+
+if status.Status == "complete" {
+	fmt.Println("Incoming Coin: ", status.IncomingCoin)
+	fmt.Println("Incoming Type: ", status.IncomingType)
+	fmt.Println("Outgoing Coin: ", status.OutgoingCoin)
+	fmt.Println("Outgoing Type: ", status.OutgoingType)
+	fmt.Println("Address: ", status.Address)
+	fmt.Println("Transaction ID: ", status.Transaction)
+	fmt.Println("Withdraw: ", status.Withdraw)
+}
 ```
 
 # Functions
