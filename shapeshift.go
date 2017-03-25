@@ -3,6 +3,7 @@ package shapeshift
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 )
@@ -48,9 +49,6 @@ type DepositStatusResponse struct {
 	OutgoingType string  `json:"outgoingType,omitempty"`
 	Transaction  string  `json:"transaction,omitempty"`
 	Error        string  `json:"error,omitempty"`
-}
-
-type CoinsResponse struct {
 }
 
 type Receipt struct {
@@ -143,18 +141,18 @@ type TimeRemainingResponse struct {
 	Seconds int    `json:"seconds_remaining"`
 }
 
-func (p Pair) GetRates() RateResponse {
+func (p Pair) GetRates() string {
 	r := DoHttp("GET", "rate", p.Name)
 	var g RateResponse
 	json.Unmarshal(r, &g)
-	return g
+	return g.Rate
 }
 
-func (p Pair) GetLimits() LimitResponse {
+func (p Pair) GetLimits() string {
 	r := DoHttp("GET", "limit", p.Name)
 	var g LimitResponse
 	json.Unmarshal(r, &g)
-	return g
+	return g.Limit
 }
 
 func (p Pair) GetInfo() MarketInfoResponse {
@@ -166,6 +164,7 @@ func (p Pair) GetInfo() MarketInfoResponse {
 
 func RecentTransactions(count string) RecentTranxResponse {
 	r := DoHttp("GET", "recenttx", count)
+	fmt.Println(string(r))
 	var g RecentTranxResponse
 	json.Unmarshal(r, &g)
 	return g
@@ -194,6 +193,7 @@ type ReceiptResponse struct {
 
 func Coins() CoinsResponse {
 	r := DoHttp("GET", "getcoins", "")
+	fmt.Println(string(r))
 	var g CoinsResponse
 	json.Unmarshal(r, &g)
 	return g

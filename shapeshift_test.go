@@ -1,7 +1,6 @@
 package shapeshift
 
 import (
-	"container/list"
 	"testing"
 )
 
@@ -15,7 +14,7 @@ func TestPairs(t *testing.T) {
 
 	rate := pair.GetRates()
 
-	t.Log("Rate: ", rate.Rate)
+	t.Log("Rate: ", rate)
 
 }
 
@@ -25,7 +24,7 @@ func TestLimits(t *testing.T) {
 
 	limits := pair.GetLimits()
 
-	t.Log("Limit: ", limits.Limit)
+	t.Log("Limit: ", limits)
 
 }
 
@@ -47,7 +46,13 @@ func TestRecentTransactions(t *testing.T) {
 
 	recent := RecentTransactions("5")
 
-	t.Log(recent)
+	for _, v := range recent {
+		t.Log("In: ", v.CurIn)
+		t.Log("Out: ", v.CurOut)
+		t.Log("Amount: ", v.Amount)
+		t.Log("Timestamp: ", v.Timestamp)
+		t.Log("-------------------------------")
+	}
 
 }
 
@@ -87,7 +92,9 @@ func TestDepositStatus(t *testing.T) {
 func TestGetSupportedCoins(t *testing.T) {
 
 	coins := Coins()
-	t.Log(coins)
+	eth := coins.ETH
+	t.Log("Coin: ", eth.Name)
+	t.Log("Status: ", eth.Status)
 
 }
 
