@@ -168,6 +168,8 @@ func TestEmailReceipt(t *testing.T) {
 
 	if response.isOk() {
 		t.Log("Response was good!")
+	} else {
+		t.Log(response.ErrorMsg())
 	}
 
 	t.Log(response)
