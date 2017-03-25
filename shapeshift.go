@@ -3,7 +3,6 @@ package shapeshift
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 )
@@ -164,7 +163,6 @@ func (p Pair) GetInfo() MarketInfoResponse {
 
 func RecentTransactions(count string) RecentTranxResponse {
 	r := DoHttp("GET", "recenttx", count)
-	fmt.Println(string(r))
 	var g RecentTranxResponse
 	json.Unmarshal(r, &g)
 	return g
@@ -193,7 +191,6 @@ type ReceiptResponse struct {
 
 func Coins() CoinsResponse {
 	r := DoHttp("GET", "getcoins", "")
-	fmt.Println(string(r))
 	var g CoinsResponse
 	json.Unmarshal(r, &g)
 	return g

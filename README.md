@@ -82,67 +82,83 @@ The other ShapeShift API requests are available for you to use.
 ### :white_check_mark: Get Rate
 Gets the current rate offered by Shapeshift. This is an estimate because the rate can occasionally change rapidly depending on the markets. The rate is also a 'use-able' rate not a direct market rate. Meaning multiplying your input coin amount times the rate should give you a close approximation of what will be sent out. This rate does not include the transaction (miner) fee taken off every transaction.
 ```go
-pair := Pair{"eth_btc"}
-
+pair := shapeshift.Pair{"eth_btc"}
 rate := pair.GetRates()
 
-t.Logf("Pair: %v at %v",rate.Pair, rate.Rate)
+fmt.Println("Rate: ", rate)
 ```
 
 ### :white_check_mark: Deposit Limits
 Gets the current deposit limit set by Shapeshift. Amounts deposited over this limit will be sent to the return address if one was entered, otherwise the user will need to contact ShapeShift support to retrieve their coins. This is an estimate because a sudden market swing could move the limit.
 ```go
-pair := Pair{"eth_btc"}
-
+pair := shapeshift.Pair{"eth_btc"}
 limits := pair.GetLimits()
 
-t.Logf("Limits on Pair: %v LIMIT: %v",limits.Pair, limits.Limit)
+fmt.Println("Limit: ", limits)
 ```
 
 ### :white_check_mark: Market Info
 This gets the market info (pair, rate, limit, minimum limit, miner fee)
 ```go
-pair := Pair{"btc_eth"}
-
+pair := shapeshift.Pair{"btc_eth"}
 info := pair.GetInfo()
 
-t.Logf("Info Pair: %v | Min: %f | LIMIT: %f",info.Pair, info.Min, info.Limit)
+fmt.Println("Pair: ", info.Pair)
+fmt.Println("Min: ", info.Min)
+fmt.Println("Miner Fee: ", info.MinerFee)
+fmt.Println("Limit: ", info.Limit)
+fmt.Println("Rate: ", info.Rate)
 ```
 
 ### :white_check_mark: Recent Transactions
 ```go
-recent := RecentTransactions()
+recent := shapeshift.RecentTransactions("5")
 
-t.Log(recent)
+for _, v := range recent {
+    fmt.Println("In: ", v.CurIn)
+    fmt.Println("Out: ", v.CurOut)
+    fmt.Println("Amount: ", v.Amount)
+    fmt.Println("Timestamp: ", v.Timestamp)
+    fmt.Println("-------------------------------")
+}
 ```
 ### :white_check_mark: Deposit Address Status
 This returns the status of the most recent deposit transaction to the address.
 ```go
-status := DepositStatus("16FdfRFVPUwiKAceRSqgEfn1tmB4sVUmLh")
+status := shapeshift.DepositStatus("1JP7QWC9GbpKEHSvefygWk5woFy9xeQHKc")
 
-t.Log(status.Status)
+fmt.Println("Deposit Status: ", status.Status)
+fmt.Println("Incoming Coin: ", status.IncomingCoin)
+fmt.Println("Incoming Type: ", status.IncomingType)
+fmt.Println("Outgoing Coin: ", status.OutgoingCoin)
+fmt.Println("Outgoing Type: ", status.OutgoingType)
+fmt.Println("Address: ", status.Address)
+fmt.Println("Transaction ID: ", status.Transaction)
+fmt.Println("Withdraw: ", status.Withdraw)
 ```
 
 ### :white_check_mark: Time Remaining on Fixed Transaction Amount
 Get a list of the most recent transactions.
 ```go
-status := TimeRemaining("16FdfRFVPUwiKAceRSqgEfn1tmB4sVUmLh")
+status := shapeshift.TimeRemaining("16FdfRFVPUwiKAceRSqgEfn1tmB4sVUmLh")
 
-t.Log(status.Status)
+fmt.Println(status.Status)
 ```
 ### :white_check_mark: Get Available Coins
 Allows anyone to get a list of all the currencies that Shapeshift currently supports at any given time. The list will include the name, symbol, availability status, and an icon link for each.
 ```go
-coins := Coins()
-t.Log(coins)
+coins := shapeshift.Coins()
+eth := coins.ETH
+fmt.Println("Coin: ", eth.Name)
+fmt.Println("Status: ", eth.Status)
 ```
 
 ### :white_check_mark: Validate Address with Coin Symbol
 Allows user to verify that their receiving address is a valid address according to a given wallet daemon. If isvalid returns true, this address is valid according to the coin daemon indicated by the currency symbol.
 ```go
-address := Validate("1JP7QWC9GbpKEHSvefygWk5woFy9xeQHKc", "btc")
+address := shapeshift.Validate("16FdfRFVPUwiKAceRSqgEfn1tmB4sVUmLh", "btc")
 
-fmt.Println("Address Validatation is: ",address.Valid)
+fmt.Println("Address is: ", address.Valid)
 fmt.Println("Error: ",address.Error)
 ```
 # Primary Requests
@@ -150,36 +166,41 @@ fmt.Println("Error: ",address.Error)
 ### :white_check_mark: Create New Transaction
 This is the primary data input into ShapeShift.
 ```go
-new := New{
-		Pair: "eth_btc",
-		ToAddress: "16FdfRFVPUwiKAceRSqgEfn1tmB4sVUmLh",
+new := shapeshift.New{
+		Pair:        "eth_btc",
+		ToAddress:   "16FdfRFVPUwiKAceRSqgEfn1tmB4sVUmLh",
 		FromAddress: "0xcf2f204aC8D7714990912fA422874371c001217D",
 	}
 
 response := new.Shift()
 
-t.Log("Send To Address: ", response.SendTo, "\n")
-t.Log("Send Type: ", response.SendType, "\n")
-t.Log("Send Type: ", response.ApiKey, "\n")
+fmt.Println("Send To Address: ", response.SendTo)
+fmt.Println("Send Type: ", response.SendType)
+fmt.Println("Receiving at Address: ", response.ReturnTo)
+fmt.Println("Receiving Type: ", response.ReturnType)
+fmt.Println("Send Type: ", response.SendType)
+fmt.Println("API Key: ", response.ApiKey)
+fmt.Println("Public Data: ", response.Public)
+fmt.Println("XrpDestTag: ", response.XrpDestTag)
 ```
 
 ### :white_check_mark: Request Email Receipt
 This call requests a receipt for a transaction. The email address will be added to the conduit associated with that transaction as well. (Soon it will also send receipts to subsequent transactions on that conduit)
 ```go
-info := Receipt{
+info := shapeshift.Receipt{
 		Email: "user@awesome.com",
 		TransactionID: "owkdwodkkwokdwdw",
 	}
 
 response := info.Send();
 
-t.Log(response)
+fmt.Println(response)
 ```
 
 ### :white_check_mark: Fixed Amount Transaction
 When a transaction is created with a fixed amount requested there is a 10 minute window for the deposit. After the 10 minute window if the deposit has not been received the transaction expires and a new one must be created. This api call returns how many seconds are left before the transaction expires. Please note that if the address is a ripple address, it will include the "?dt=destTagNUM" appended on the end, and you will need to use the URIEncodeComponent() function on the address before sending it in as a param, to get a successful response.
 ```go
-new := New{
+new := shapeshift.New{
 		Pair: "eth_btc",
 		Amount: 0.25,
 		ToAddress: "16FdfRFVPUwiKAceRSqgEfn1tmB4sVUmLh",
@@ -188,19 +209,19 @@ new := New{
 
 response := new.FixedShift()
 
-t.Log("Pair: ", response.Pair)
-t.Log("Quoted Rate: ", response.QuotedRate)
-t.Log("Deposit Address: ", response.Deposit)
-t.Log("Deposit Amount: ", response.DepositAmount)
-t.Log("Withdraw Amount: ", response.WithdrawalAmount)
-t.Log("Withdraw Address: ", response.Withdrawal)
-t.Log("Expiration: ", response.Expiration)
+fmt.Println("Pair: ", response.Pair)
+fmt.Println("Quoted Rate: ", response.QuotedRate)
+fmt.Println("Deposit Address: ", response.Deposit)
+fmt.Println("Deposit Amount: ", response.DepositAmount)
+fmt.Println("Withdraw Amount: ", response.WithdrawalAmount)
+fmt.Println("Withdraw Address: ", response.Withdrawal)
+fmt.Println("Expiration: ", response.Expiration)
 ```
 
 ### :white_check_mark: Cancel Pending Transaction
 This call allows you to request for canceling a pending transaction by the deposit address. If there is fund sent to the deposit address, this pending transaction cannot be canceled.
 ```go
-old := Address{
+old := shapeshift.Address{
 		Id: newSendToAddress,
 	}
 
@@ -213,7 +234,7 @@ old := Address{
 ### :white_check_mark: Get Transactions from Private API Key
 Allows vendors to get a list of all transactions that have ever been done using a specific API key. Transactions are created with an affilliate PUBLIC KEY, but they are looked up using the linked PRIVATE KEY, to protect the privacy of our affiliates' account details.
 ```go
-api := API{
+api := shapeshift.API{
 		Key: "oskdfoijsfuhsdhufhewhuf",
 	   }
 
@@ -229,7 +250,7 @@ for _,v := range list.Transactions {
 ### :white_check_mark: Get Transactions from Output Address
 Allows vendors to get a list of all transactions that have ever been sent to one of their addresses. The affilliate's PRIVATE KEY must be provided, and will only return transactions that were sent to output address AND were created using / linked to the affiliate's PUBLIC KEY. Please note that if the address is a ripple address and it includes the "?dt=destTagNUM" appended on the end, you will need to use the URIEncodeComponent() function on the address before sending it in as a param, to get a successful response.
 ```go
-api := API{
+api := shapeshift.API{
 		Key: "oskdfoijsfuhsdhufhewhuf",
 		Address: "1JP7QWC9GbpKEHSvefygWk5woFy9xeQHKc",
 	}
