@@ -27,17 +27,23 @@ new := shapeshift.New{
 
 response := new.Shift()
 
-sendToAddress := response.SendTo
-// i will send Ether to this address
+if response.isOk() {
 
-fmt.Println("Send To Address: ", sendToAddress)
-fmt.Println("Send Type: ", response.SendType)
-fmt.Println("Receiving at Address: ", response.ReturnTo)
-fmt.Println("Receiving Type: ", response.ReturnType)
-fmt.Println("Send Type: ", response.SendType)
-fmt.Println("API Key: ", response.ApiKey)
-fmt.Println("Public Data: ", response.Public)
-fmt.Println("XrpDestTag: ", response.XrpDestTag)
+    sendToAddress := response.SendTo
+    // i will send Ether to this address
+
+    fmt.Println("Send To Address: ", sendToAddress)
+    fmt.Println("Send Type: ", response.SendType)
+    fmt.Println("Receiving at Address: ", response.ReturnTo)
+    fmt.Println("Receiving Type: ", response.ReturnType)
+    fmt.Println("Send Type: ", response.SendType)
+    fmt.Println("API Key: ", response.ApiKey)
+    fmt.Println("Public Data: ", response.Public)
+    fmt.Println("XrpDestTag: ", response.XrpDestTag)
+
+} else {
+    fmt.Println(response.ErrorMsg())
+}
 ```
 
 # :repeat: Get Status of Transaction
@@ -46,6 +52,10 @@ Once I sent some Ethereum to the given Ethereum address, I want to check the sta
 var newTransactionId string
 
 status := shapeshift.DepositStatus(sendToAddress)
+
+if !response.isOk() {
+    fmt.Println(status.ErrorMsg())
+}
 
 fmt.Println(status.Status)
 // no_deposits
@@ -76,6 +86,13 @@ receipt := shapeshift.Receipt{
      }
 
 response := receipt.Send()
+
+if response.isOk() {
+    fmt.Println("Receipt was sent to user")
+} else {
+    fmt.Println(status.ErrorMsg())
+}
+
 ```
 
 # Additional Functions
