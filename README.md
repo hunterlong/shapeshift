@@ -8,11 +8,13 @@
 This Go Language Package will allow you to use the [ShapeShift API](https://info.shapeshift.io/) and convert your cryptocurrencies in your very own application. It includes most of the ShapeShift API requests listed on their references website. Below you'll find a perfect example of a new ShapeShift transaction.
 
 ```go
-go get github.com/hunterlong/shapeshift
+go get -u github.com/hunterlong/shapeshift
 ```
+###### get the most up to date version
 ```go
 import "github.com/hunterlong/shapeshift"
 ```
+Once you've imported shapeshift into your golang project, you can use any of the requests below. Checkout the Travis CI test logs for responses of each function. See an issue? PR it!
 
 # :new: New ShapeShift Transaction
 I want to convert Ethereum to Bitcoin. The 'ToAddress' is my Bitcoin address. Once I run this, I'll get a Ethereum address from ShapeShift.
