@@ -137,9 +137,14 @@ coins := Coins()
 t.Log(coins)
 ```
 
-### :white_large_square: Validate Address with Coin Symbol
+### :white_check_mark: Validate Address with Coin Symbol
 Allows user to verify that their receiving address is a valid address according to a given wallet daemon. If isvalid returns true, this address is valid according to the coin daemon indicated by the currency symbol.
+```go
+address := Validate("1JP7QWC9GbpKEHSvefygWk5woFy9xeQHKc", "btc")
 
+fmt.Println("Address Validatation is: ",address.Valid)
+fmt.Println("Error: ",address.Error)
+```
 # Primary Requests
 
 ### :white_check_mark: Create New Transaction
@@ -205,11 +210,38 @@ old := Address{
 
 # API Key Required Requests
 
-### :white_large_square: Get Transactions from Private API Key
+### :white_check_mark: Get Transactions from Private API Key
 Allows vendors to get a list of all transactions that have ever been done using a specific API key. Transactions are created with an affilliate PUBLIC KEY, but they are looked up using the linked PRIVATE KEY, to protect the privacy of our affiliates' account details.
+```go
+api := API{
+		Key: "oskdfoijsfuhsdhufhewhuf",
+	   }
 
-### :white_large_square: Get Transactions from Output Address
+list := api.ListTransactions()
+
+for _,v := range list.Transactions {
+    fmt.Println("Input: ",v.InputAddress)
+    fmt.Println("Amount: ",v.InputAmount)
+}
+```
+###### there was no way for me to test this transaction since i'm not a vendor
+
+### :white_check_mark: Get Transactions from Output Address
 Allows vendors to get a list of all transactions that have ever been sent to one of their addresses. The affilliate's PRIVATE KEY must be provided, and will only return transactions that were sent to output address AND were created using / linked to the affiliate's PUBLIC KEY. Please note that if the address is a ripple address and it includes the "?dt=destTagNUM" appended on the end, you will need to use the URIEncodeComponent() function on the address before sending it in as a param, to get a successful response.
+```go
+api := API{
+		Key: "oskdfoijsfuhsdhufhewhuf",
+		Address: "1JP7QWC9GbpKEHSvefygWk5woFy9xeQHKc",
+	}
+
+list := api.ListTransactions()
+
+for _,v := range list.Transactions {
+    fmt.Println("Input: ",v.InputAddress)
+    fmt.Println("Amount: ",v.InputAmount)
+}
+```
+###### there was no way for me to test this transaction since i'm not a vendor
 
 # Coin Pairs
 Many of the requests require a 'coin pair'. A coin pair is of the format deposit_withdrawal. Example: 'btc_ltc'. Valid pairs are any combination of the below listed valid coins.* The list will grow as we add more:

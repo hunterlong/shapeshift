@@ -1,6 +1,7 @@
 package shapeshift
 
 import (
+	"container/list"
 	"testing"
 )
 
@@ -47,6 +48,17 @@ func TestRecentTransactions(t *testing.T) {
 	recent := RecentTransactions("5")
 
 	t.Log(recent)
+
+}
+
+func TestValidateAddress(t *testing.T) {
+
+	address := Validate("16FdfRFVPUwiKAceRSqgEfn1tmB4sVUmLh", "btc")
+	t.Log("Address is: ", address.Valid)
+
+	address2 := Validate("1JP7QWC9GbpKEHSvefygWk5woFy9xeQHKc", "btc")
+	t.Log("Second Address is: ", address2.Valid)
+	t.Log("Second Error: ", address2.Error)
 
 }
 
@@ -172,4 +184,38 @@ func TestCancelTransaction(t *testing.T) {
 	t.Log(response.Error)
 	t.Log(response.Success)
 
+}
+
+func TestListTransactionsFromAPI(t *testing.T) {
+
+	api := API{
+		Key: "oskdfoijsfuhsdhufhewhuf",
+	}
+
+	list := api.ListTransactions()
+
+	for _, v := range list.Transactions {
+		t.Log("Input: ", v.InputAddress)
+		t.Log("Amount: ", v.InputAmount)
+	}
+
+	t.Log(list)
+
+}
+
+func TestListAddressTransactionsFromAPI(t *testing.T) {
+
+	api := API{
+		Key:     "oskdfoijsfuhsdhufhewhuf",
+		Address: "1JP7QWC9GbpKEHSvefygWk5woFy9xeQHKc",
+	}
+
+	list := api.ListTransactions()
+
+	for _, v := range list.Transactions {
+		t.Log("Input: ", v.InputAddress)
+		t.Log("Amount: ", v.InputAmount)
+	}
+
+	t.Log(list)
 }

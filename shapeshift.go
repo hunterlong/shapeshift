@@ -58,6 +58,11 @@ type Receipt struct {
 	TransactionID string `json:"txid"`
 }
 
+type ValidateResponse struct {
+	Valid bool   `json:"isValid"`
+	Error string `json:"error"`
+}
+
 type CancelResponse struct {
 	Success string `json:"success,omitempty"`
 	Error   string `json:"error,omitempty"`
@@ -104,6 +109,33 @@ type NewFixedTransactionResponse struct {
 	ReturnAddress    string  `json:"returnAddress"`
 	APIPubKey        string  `json:"apiPubKey"`
 	MinerFee         string  `json:"minerFee"`
+}
+
+type ListTransactionsAPIResponse struct {
+	Transactions []Transaction
+	ErrorResponse
+}
+
+type ErrorResponse struct {
+	Message string `json:"error,omitempty"`
+}
+
+type Transaction struct {
+	InputTXID      string  `json:"inputTXID"`
+	InputAddress   string  `json:"inputAddress"`
+	InputCurrency  string  `json:"inputCurrency,omitempty"`
+	InputAmount    float64 `json:"inputAmount,omitempty"`
+	OutputTXID     string  `json:"outputTXID,omitempty"`
+	OutputAddress  string  `json:"outputAddress,omitempty"`
+	OutputCurrency string  `json:"outputCurrency,omitempty"`
+	OutputAmount   string  `json:"outputAmount,omitempty"`
+	ShiftRate      string  `json:"shiftRate,omitempty"`
+	Status         string  `json:"status,omitempty"`
+}
+
+type API struct {
+	Key     string
+	Address string
 }
 
 type TimeRemainingResponse struct {
@@ -191,6 +223,25 @@ func (n New) FixedShift() NewFixedTransactionResponse {
 func (n Address) Cancel() CancelResponse {
 	r := DoPostHttp("POST", "cancelpending", n)
 	var g CancelResponse
+	json.Unmarshal(r, &g)
+	return g
+}
+
+func Validate(addr string, coin string) ValidateResponse {
+	r := DoHttp("GET", "validateAddress/"+addr, coin)
+	var g ValidateResponse
+	json.Unmarshal(r, &g)
+	return g
+}
+
+func (i API) ListTransactions() ListTransactionsAPIResponse {
+	var r []byte
+	var g ListTransactionsAPIResponse
+	if i.Address != "" {
+		r = DoHttp("GET", "txbyaddress/"+i.Address, i.Key)
+	} else {
+		r = DoHttp("GET", "txbyapikey", i.Key)
+	}
 	json.Unmarshal(r, &g)
 	return g
 }
