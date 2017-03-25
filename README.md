@@ -16,6 +16,8 @@ import "github.com/hunterlong/shapeshift"
 ```
 Once you've imported shapeshift into your golang project, you can use any of the requests below. Checkout the Travis CI test logs for responses of each function. See an issue? PR it!
 
+***
+
 # :new: New ShapeShift Transaction
 I want to convert Ethereum to Bitcoin. The 'ToAddress' is my Bitcoin address. Once I run this, I'll get a Ethereum address from ShapeShift.
 ```go
@@ -45,6 +47,7 @@ if response.isOk() {
     fmt.Println(response.ErrorMsg())
 }
 ```
+***
 
 # :repeat: Get Status of Transaction
 Once I sent some Ethereum to the given Ethereum address, I want to check the status of my ShapeShift transaction by inserting the Etheruem address 'sendToAddress' that ShapeShift gave me in previous function.
@@ -76,6 +79,7 @@ if status.Status == "complete" {
 	// saving transaction ID so i can send a receipt
 }
 ```
+***
 
 # :arrow_double_up: Send an Email Receipt
 Want to send a receipt of this transaction? Just include an email address and the transaction ID affiliated with the ShapeShift transaction. 
@@ -94,6 +98,7 @@ if response.isOk() {
 }
 
 ```
+***
 
 # Additional Functions
 The other ShapeShift API requests are available for you to use. 
@@ -106,6 +111,7 @@ rate := pair.GetRates()
 
 fmt.Println("Rate: ", rate)
 ```
+***
 
 ### :white_check_mark: Deposit Limits
 Gets the current deposit limit set by Shapeshift. Amounts deposited over this limit will be sent to the return address if one was entered, otherwise the user will need to contact ShapeShift support to retrieve their coins. This is an estimate because a sudden market swing could move the limit.
@@ -115,6 +121,7 @@ limits := pair.GetLimits()
 
 fmt.Println("Limit: ", limits)
 ```
+***
 
 ### :white_check_mark: Market Info
 This gets the market info (pair, rate, limit, minimum limit, miner fee)
@@ -128,6 +135,7 @@ fmt.Println("Miner Fee: ", info.MinerFee)
 fmt.Println("Limit: ", info.Limit)
 fmt.Println("Rate: ", info.Rate)
 ```
+***
 
 ### :white_check_mark: Recent Transactions
 ```go
@@ -141,6 +149,8 @@ for _, v := range recent {
     fmt.Println("-------------------------------")
 }
 ```
+***
+
 ### :white_check_mark: Deposit Address Status
 This returns the status of the most recent deposit transaction to the address.
 ```go
@@ -155,6 +165,7 @@ fmt.Println("Address: ", status.Address)
 fmt.Println("Transaction ID: ", status.Transaction)
 fmt.Println("Withdraw: ", status.Withdraw)
 ```
+***
 
 ### :white_check_mark: Time Remaining on Fixed Transaction Amount
 Get a list of the most recent transactions.
@@ -163,6 +174,8 @@ status := shapeshift.TimeRemaining("16FdfRFVPUwiKAceRSqgEfn1tmB4sVUmLh")
 
 fmt.Println(status.Status)
 ```
+***
+
 ### :white_check_mark: Get Available Coins
 Allows anyone to get a list of all the currencies that Shapeshift currently supports at any given time. The list will include the name, symbol, availability status, and an icon link for each.
 ```go
@@ -171,6 +184,7 @@ eth := coins.ETH
 fmt.Println("Coin: ", eth.Name)
 fmt.Println("Status: ", eth.Status)
 ```
+***
 
 ### :white_check_mark: Validate Address with Coin Symbol
 Allows user to verify that their receiving address is a valid address according to a given wallet daemon. If isvalid returns true, this address is valid according to the coin daemon indicated by the currency symbol.
@@ -180,6 +194,8 @@ address := shapeshift.Validate("16FdfRFVPUwiKAceRSqgEfn1tmB4sVUmLh", "btc")
 fmt.Println("Address is: ", address.Valid)
 fmt.Println("Error: ",address.Error)
 ```
+***
+
 # Primary Requests
 
 ### :white_check_mark: Create New Transaction
@@ -202,6 +218,7 @@ fmt.Println("API Key: ", response.ApiKey)
 fmt.Println("Public Data: ", response.Public)
 fmt.Println("XrpDestTag: ", response.XrpDestTag)
 ```
+***
 
 ### :white_check_mark: Request Email Receipt
 This call requests a receipt for a transaction. The email address will be added to the conduit associated with that transaction as well. (Soon it will also send receipts to subsequent transactions on that conduit)
@@ -215,6 +232,7 @@ response := info.Send();
 
 fmt.Println(response)
 ```
+***
 
 ### :white_check_mark: Fixed Amount Transaction
 When a transaction is created with a fixed amount requested there is a 10 minute window for the deposit. After the 10 minute window if the deposit has not been received the transaction expires and a new one must be created. This api call returns how many seconds are left before the transaction expires. Please note that if the address is a ripple address, it will include the "?dt=destTagNUM" appended on the end, and you will need to use the URIEncodeComponent() function on the address before sending it in as a param, to get a successful response.
@@ -236,6 +254,7 @@ fmt.Println("Withdraw Amount: ", response.WithdrawalAmount)
 fmt.Println("Withdraw Address: ", response.Withdrawal)
 fmt.Println("Expiration: ", response.Expiration)
 ```
+***
 
 ### :white_check_mark: Cancel Pending Transaction
 This call allows you to request for canceling a pending transaction by the deposit address. If there is fund sent to the deposit address, this pending transaction cannot be canceled.
@@ -246,6 +265,7 @@ old := shapeshift.Address{
 
 	response := old.Cancel()
 ```
+***
 
 
 # API Key Required Requests
@@ -265,6 +285,7 @@ for _,v := range list.Transactions {
 }
 ```
 ###### there was no way for me to test this transaction since i'm not a vendor
+***
 
 ### :white_check_mark: Get Transactions from Output Address
 Allows vendors to get a list of all transactions that have ever been sent to one of their addresses. The affilliate's PRIVATE KEY must be provided, and will only return transactions that were sent to output address AND were created using / linked to the affiliate's PUBLIC KEY. Please note that if the address is a ripple address and it includes the "?dt=destTagNUM" appended on the end, you will need to use the URIEncodeComponent() function on the address before sending it in as a param, to get a successful response.
@@ -282,6 +303,7 @@ for _,v := range list.Transactions {
 }
 ```
 ###### there was no way for me to test this transaction since i'm not a vendor
+***
 
 # Coin Pairs
 Many of the requests require a 'coin pair'. A coin pair is of the format deposit_withdrawal. Example: 'btc_ltc'. Valid pairs are any combination of the below listed valid coins.* The list will grow as we add more:
@@ -292,6 +314,7 @@ btc, ltc, ppc, drk, doge, nmc, ftc, blk, nxt, btcd, qrk, rdd, nbt, bts, bitusd, 
 * If a particular coin goes offline any pairs using it will return a message stating that pair is temporarily unavailable.
 
 All requests are only available via HTTPS, in the interest of security best practices we do not support API calls over HTTP.
+***
 
 ### Package Useful? :beer: :bug:
 If this package saved you some time, or if you're excited to make that next crypto-bot, feel free to throw some coins my way. If you see an issue with this golang package, please submit a pull request. 
@@ -299,6 +322,7 @@ If this package saved you some time, or if you're excited to make that next cryp
 ETH: 0x9741C5522B85E195B92C71CE29B54A4C99D76c13
 BTC: 16FdfRFVPUwiKAceRSqgEfn1tmB4sVUmLh
 ```
+***
 
 # License
 This golang package is built for the cryptocurrency community and is released with MIT license. 
