@@ -161,68 +161,68 @@ type API struct {
 
 type TimeRemainingResponse struct {
 	Status  string `json:"status"`
-	Seconds int    `json:"seconds_remaining"`
+	Seconds int    `json:"seconds_remaining,string"`
 	Error
 }
 
-func (p Pair) GetRates() (decimal.Decimal, error) {
+func (p Pair) GetRate() (decimal.Decimal, error) {
 	r, err := DoHttp("GET", "rate", p.Name)
 	if err != nil {
 		return decimal.Zero, err
 	}
 	var g RateResponse
-	json.Unmarshal(r, &g)
+	err = json.Unmarshal(r, &g)
 	return g.Rate, err
 }
 
-func (p Pair) GetLimits() (decimal.Decimal, error) {
+func (p Pair) GetLimit() (decimal.Decimal, error) {
 	r, err := DoHttp("GET", "limit", p.Name)
 	if err != nil {
-		panic(err)
+		return decimal.Zero, err
 	}
 	var g LimitResponse
-	json.Unmarshal(r, &g)
+	err = json.Unmarshal(r, &g)
 	return g.Limit, err
 }
 
-func (p Pair) GetInfo() MarketInfoResponse {
+func (p Pair) GetInfo() (*MarketInfoResponse, error) {
 	r, err := DoHttp("GET", "marketinfo", p.Name)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 	var g MarketInfoResponse
-	json.Unmarshal(r, &g)
-	return g
+	err = json.Unmarshal(r, &g)
+	return &g, err
 }
 
-func RecentTransactions(count string) RecentTranxResponse {
+func RecentTransactions(count string) (*RecentTranxResponse, error) {
 	r, err := DoHttp("GET", "recenttx", count)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 	var g RecentTranxResponse
-	json.Unmarshal(r, &g)
-	return g
+	err = json.Unmarshal(r, &g)
+	return &g, err
 }
 
-func DepositStatus(addr string) DepositStatusResponse {
+func DepositStatus(addr string) (*DepositStatusResponse, error) {
 	r, err := DoHttp("GET", "txStat", addr)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 	var g DepositStatusResponse
-	json.Unmarshal(r, &g)
-	return g
+	err = json.Unmarshal(r, &g)
+	return &g, err
 }
 
-func TimeRemaining(addr string) TimeRemainingResponse {
+func TimeRemaining(addr string) (*TimeRemainingResponse, error) {
 	r, err := DoHttp("GET", "timeremaining", addr)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 	var g TimeRemainingResponse
-	json.Unmarshal(r, &g)
-	return g
+	err = json.Unmarshal(r, &g)
+	return &g, err
 }
 
 type ReceiptResponse struct {
@@ -233,93 +233,97 @@ type ReceiptResponse struct {
 	Error
 }
 
-func Coins() CoinsResponse {
+func Coins() (*CoinsResponse, error) {
 	r, err := DoHttp("GET", "getcoins", "")
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 	var g CoinsResponse
-	json.Unmarshal(r, &g)
-	return g
+	err = json.Unmarshal(r, &g)
+	return &g, err
 }
 
-func (r Receipt) Send() ReceiptResponse {
+func (r Receipt) Send() (*ReceiptResponse, error) {
 	q, err := DoPostHttp("POST", "mail", r)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 	var g ReceiptResponse
 	json.Unmarshal(q, &g)
-	return g
+	return &g, err
 }
 
-func (n New) Shift() NewTransactionResponse {
+func (n New) Shift() (*NewTransactionResponse, error) {
 	r, err := DoPostHttp("POST", "shift", n)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 	var g NewTransactionResponse
-	json.Unmarshal(r, &g)
-	return g
+	err = json.Unmarshal(r, &g)
+	return &g, err
 }
 
-func (n New) FixedShift() NewFixedTransactionResponse {
+func (n New) FixedShift() (*NewFixedTransactionResponse, error) {
 	r, err := DoPostHttp("POST", "sendamount", n)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 	var g FixedTransactionResponse
-	json.Unmarshal(r, &g)
-	return g.Response
+	err = json.Unmarshal(r, &g)
+	return &g.Response, err
 }
 
-func (n Address) Cancel() CancelResponse {
+func (n Address) Cancel() (*CancelResponse, error) {
 	r, err := DoPostHttp("POST", "cancelpending", n)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 	var g CancelResponse
-	json.Unmarshal(r, &g)
-	return g
+	err = json.Unmarshal(r, &g)
+	return &g, err
 }
 
-func Validate(addr string, coin string) ValidateResponse {
+func Validate(addr string, coin string) (*ValidateResponse, error) {
 	r, err := DoHttp("GET", "validateAddress/"+addr, coin)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 	var g ValidateResponse
-	json.Unmarshal(r, &g)
-	return g
+	err = json.Unmarshal(r, &g)
+	return &g, err
 }
 
-func (i API) ListTransactions() ListTransactionsAPIResponse {
+func (i API) ListTransactions() ([]Transaction, error) {
 	var r []byte
 	//var err error
-	var g ListTransactionsAPIResponse
+	var err error
 	if i.Address != "" {
-		r, _ = DoHttp("GET", "txbyaddress/"+i.Address, i.Key)
+		r, err = DoHttp("GET", "txbyaddress/"+i.Address, i.Key)
 	} else {
-		r, _ = DoHttp("GET", "txbyapikey", i.Key)
+		r, err = DoHttp("GET", "txbyapikey", i.Key)
 	}
-	json.Unmarshal(r, &g)
-	return g
+	if err != nil {
+		return nil, err
+	}
+	var g []Transaction
+	err = json.Unmarshal(r, &g)
+	return g, err
 }
 
 func DoPostHttp(method string, apimethod string, data interface{}) ([]byte, error) {
 	new, err := json.Marshal(data)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 	req, err := http.NewRequest(method, apiUrl+"/"+apimethod, bytes.NewBuffer(new))
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 	req.Header.Set("Content-Type", "application/json")
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 	defer resp.Body.Close()
 	body, _ := ioutil.ReadAll(resp.Body)
@@ -330,12 +334,12 @@ func DoPostHttp(method string, apimethod string, data interface{}) ([]byte, erro
 func DoHttp(method string, apimethod string, url string) ([]byte, error) {
 	req, err := http.NewRequest(method, apiUrl+"/"+apimethod+"/"+url, bytes.NewBuffer([]byte("")))
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 	defer resp.Body.Close()
 	body, _ := ioutil.ReadAll(resp.Body)
