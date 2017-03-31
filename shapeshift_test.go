@@ -2,6 +2,7 @@ package shapeshift
 
 import (
 	"testing"
+	"github.com/shopspring/decimal"
 )
 
 var newSendToAddress string
@@ -180,7 +181,7 @@ func TestNewFixedTransaction(t *testing.T) {
 
 	new := New{
 		Pair:        "eth_btc",
-		Amount:      0.25,
+		Amount:      decimal.New(25, -2),
 		ToAddress:   "16FdfRFVPUwiKAceRSqgEfn1tmB4sVUmLh",
 		FromAddress: "0xcf2f204aC8D7714990912fA422874371c001217D",
 	}
