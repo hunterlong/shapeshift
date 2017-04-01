@@ -52,7 +52,10 @@ func TestMarketInfo(t *testing.T) {
 
 	pair := Pair{"btc_eth"}
 
-	info := pair.GetInfo()
+	info, err := pair.GetInfo()
+	if err != nil {
+		t.Fail()
+	}
 
 	if !info.isOk() {
 		t.Log(info.ErrorMsg())
@@ -68,9 +71,12 @@ func TestMarketInfo(t *testing.T) {
 
 func TestRecentTransactions(t *testing.T) {
 
-	recent := RecentTransactions("5")
+	recent, err := RecentTransactions("5")
+	if err != nil {
+		t.Fail()
+	}
 
-	for _, v := range recent {
+	for _, v := range *recent {
 		t.Log("In: ", v.CurIn)
 		t.Log("Out: ", v.CurOut)
 		t.Log("Amount: ", v.Amount)
@@ -82,10 +88,16 @@ func TestRecentTransactions(t *testing.T) {
 
 func TestValidateAddress(t *testing.T) {
 
-	address := Validate("16FdfRFVPUwiKAceRSqgEfn1tmB4sVUmLh", "btc")
+	address, err := Validate("16FdfRFVPUwiKAceRSqgEfn1tmB4sVUmLh", "btc")
+	if err != nil {
+		t.Fail()
+	}
 	t.Log("Address is: ", address.Valid)
 
-	address2 := Validate("1JP7QWC9GbpKEHSvefygWk5woFy9xeQHKc", "btc")
+	address2, err := Validate("1JP7QWC9GbpKEHSvefygWk5woFy9xeQHKc", "btc")
+	if err != nil {
+		t.Fail()
+	}
 	t.Log("Second Address is: ", address2.Valid)
 	t.Log("Second Error: ", address2.ErrorMsg())
 
@@ -93,7 +105,10 @@ func TestValidateAddress(t *testing.T) {
 
 func TestDepositStatus(t *testing.T) {
 
-	status := DepositStatus("1JP7QWC9GbpKEHSvefygWk5woFy9xeQHKc")
+	status, err := DepositStatus("1JP7QWC9GbpKEHSvefygWk5woFy9xeQHKc")
+	if err != nil {
+		t.Fail()
+	}
 
 	if status.isOk() {
 
@@ -119,7 +134,11 @@ func TestDepositStatus(t *testing.T) {
 
 func TestGetSupportedCoins(t *testing.T) {
 
-	coins := Coins()
+	coins, err := Coins()
+	if err != nil {
+		t.Fail()
+	}
+
 	eth := coins.ETH
 	t.Log("Coin: ", eth.Name)
 	t.Log("Status: ", eth.Status)
@@ -134,7 +153,10 @@ func TestNewTransaction(t *testing.T) {
 		FromAddress: "0xcf2f204aC8D7714990912fA422874371c001217D",
 	}
 
-	response := new.Shift()
+	response, err := new.Shift()
+	if err != nil {
+		t.Fail()
+	}
 
 	if response.isOk() {
 
@@ -164,7 +186,10 @@ func TestEmailReceipt(t *testing.T) {
 		TransactionID: newTranxId,
 	}
 
-	response := info.Send()
+	response, err := info.Send()
+	if err != nil {
+		t.Fail()
+	}
 
 	if response.isOk() {
 		t.Log("Response was good!")
@@ -185,7 +210,10 @@ func TestNewFixedTransaction(t *testing.T) {
 		FromAddress: "0xcf2f204aC8D7714990912fA422874371c001217D",
 	}
 
-	response := new.FixedShift()
+	response, err := new.FixedShift()
+	if err != nil {
+		t.Fail()
+	}
 
 	if response.isOk() {
 
@@ -218,10 +246,14 @@ func TestNewFixedTransaction(t *testing.T) {
 
 func TestTimeRemaining(t *testing.T) {
 
-	status := TimeRemaining("1JP7QWC9GbpKEHSvefygWk5woFy9xeQHKc")
+	status, err := TimeRemaining("1JP7QWC9GbpKEHSvefygWk5woFy9xeQHKc")
+	if err != nil {
+		panic(err)
+	}
 
 	if status.isOk() {
 		t.Log("Seconds Remaining: ", status.Seconds)
+		t.Log("Status: ", status.Status)
 	} else {
 		t.Log(status.ErrorMsg())
 	}
@@ -234,7 +266,10 @@ func TestCancelTransaction(t *testing.T) {
 		Id: newSendToAddress,
 	}
 
-	response := old.Cancel()
+	response, err := old.Cancel()
+	if err != nil {
+		t.Fail()
+	}
 
 	if response.isOk() {
 		t.Log(response.Success)
@@ -250,13 +285,12 @@ func TestListTransactionsFromAPI(t *testing.T) {
 		Key: "oskdfoijsfuhsdhufhewhuf",
 	}
 
-	list := api.ListTransactions()
-
-	if !list.isOk() {
-		t.Log(list.ErrorMsg())
+	list, err := api.ListTransactions()
+	if err != nil {
+		t.Fail()
 	}
 
-	for _, v := range list.Transactions {
+	for _, v := range list {
 		t.Log("Input: ", v.InputAddress)
 		t.Log("Amount: ", v.InputAmount)
 	}
@@ -272,13 +306,12 @@ func TestListAddressTransactionsFromAPI(t *testing.T) {
 		Address: "1JP7QWC9GbpKEHSvefygWk5woFy9xeQHKc",
 	}
 
-	list := api.ListTransactions()
-
-	if !list.isOk() {
-		t.Log(list.ErrorMsg())
+	list, err := api.ListTransactions()
+	if err != nil {
+		t.Fail()
 	}
 
-	for _, v := range list.Transactions {
+	for _, v := range list {
 		t.Log("Input: ", v.InputAddress)
 		t.Log("Amount: ", v.InputAmount)
 	}
