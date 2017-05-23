@@ -27,7 +27,11 @@ new := shapeshift.New{
 	// FromAddress: "0xcf2f204aC8D7714990912fA422874371c001217D",  (Optional Return To Ethereum Address)
        }
 
-response := new.Shift()
+response, err := new.Shift()
+
+if err != nil {
+    panic(error)
+}
 
 if response.isOk() {
 
@@ -54,7 +58,11 @@ Once I sent some Ethereum to the given Ethereum address, I want to check the sta
 ```go
 var newTransactionId string
 
-status := shapeshift.DepositStatus(sendToAddress)
+status, err := shapeshift.DepositStatus(sendToAddress)
+
+if err != nil {
+    panic(err)
+}
 
 if !response.isOk() {
     fmt.Println(status.ErrorMsg())
@@ -89,7 +97,11 @@ receipt := shapeshift.Receipt{
 	TransactionID: newTransactionId,
      }
 
-response := receipt.Send()
+response, err := receipt.Send()
+
+if err != nil {
+    panic(err)
+}
 
 if response.isOk() {
     fmt.Println("Receipt was sent to user")
@@ -107,7 +119,13 @@ The other ShapeShift API requests are available for you to use.
 Gets the current rate offered by Shapeshift. This is an estimate because the rate can occasionally change rapidly depending on the markets. The rate is also a 'use-able' rate not a direct market rate. Meaning multiplying your input coin amount times the rate should give you a close approximation of what will be sent out. This rate does not include the transaction (miner) fee taken off every transaction.
 ```go
 pair := shapeshift.Pair{"eth_btc"}
-rate := pair.GetRates()
+
+rate, err := pair.GetRates()
+
+if err != nil {
+    panic(err)
+}
+
 
 fmt.Println("Rate: ", rate)
 ```
@@ -117,7 +135,11 @@ fmt.Println("Rate: ", rate)
 Gets the current deposit limit set by Shapeshift. Amounts deposited over this limit will be sent to the return address if one was entered, otherwise the user will need to contact ShapeShift support to retrieve their coins. This is an estimate because a sudden market swing could move the limit.
 ```go
 pair := shapeshift.Pair{"eth_btc"}
-limits := pair.GetLimits()
+limits, err := pair.GetLimits()
+
+if err != nil {
+    panic(err)
+}
 
 fmt.Println("Limit: ", limits)
 ```
@@ -127,7 +149,11 @@ fmt.Println("Limit: ", limits)
 This gets the market info (pair, rate, limit, minimum limit, miner fee)
 ```go
 pair := shapeshift.Pair{"btc_eth"}
-info := pair.GetInfo()
+info, err := pair.GetInfo()
+
+if err != nil {
+    panic(err)
+}
 
 fmt.Println("Pair: ", info.Pair)
 fmt.Println("Min: ", info.Min)
@@ -139,7 +165,11 @@ fmt.Println("Rate: ", info.Rate)
 
 ### :white_check_mark: Recent Transactions
 ```go
-recent := shapeshift.RecentTransactions("5")
+recent, err := shapeshift.RecentTransactions("5")
+
+if err != nil {
+    panic(err)
+}
 
 for _, v := range recent {
     fmt.Println("In: ", v.CurIn)
@@ -154,7 +184,11 @@ for _, v := range recent {
 ### :white_check_mark: Deposit Address Status
 This returns the status of the most recent deposit transaction to the address.
 ```go
-status := shapeshift.DepositStatus("1JP7QWC9GbpKEHSvefygWk5woFy9xeQHKc")
+status, err := shapeshift.DepositStatus("1JP7QWC9GbpKEHSvefygWk5woFy9xeQHKc")
+
+if err != nil {
+    panic(err)
+}
 
 fmt.Println("Deposit Status: ", status.Status)
 fmt.Println("Incoming Coin: ", status.IncomingCoin)
@@ -170,7 +204,11 @@ fmt.Println("Withdraw: ", status.Withdraw)
 ### :white_check_mark: Time Remaining on Fixed Transaction Amount
 Get a list of the most recent transactions.
 ```go
-status := shapeshift.TimeRemaining("16FdfRFVPUwiKAceRSqgEfn1tmB4sVUmLh")
+status, err := shapeshift.TimeRemaining("16FdfRFVPUwiKAceRSqgEfn1tmB4sVUmLh")
+
+if err != nil {
+    panic(err)
+}
 
 fmt.Println(status.Status)
 ```
@@ -179,7 +217,12 @@ fmt.Println(status.Status)
 ### :white_check_mark: Get Available Coins
 Allows anyone to get a list of all the currencies that Shapeshift currently supports at any given time. The list will include the name, symbol, availability status, and an icon link for each.
 ```go
-coins := shapeshift.Coins()
+coins, err := shapeshift.Coins()
+
+if err != nil {
+    panic(err)
+}
+
 eth := coins.ETH
 fmt.Println("Coin: ", eth.Name)
 fmt.Println("Status: ", eth.Status)
@@ -189,7 +232,11 @@ fmt.Println("Status: ", eth.Status)
 ### :white_check_mark: Validate Address with Coin Symbol
 Allows user to verify that their receiving address is a valid address according to a given wallet daemon. If isvalid returns true, this address is valid according to the coin daemon indicated by the currency symbol.
 ```go
-address := shapeshift.Validate("16FdfRFVPUwiKAceRSqgEfn1tmB4sVUmLh", "btc")
+address, err := shapeshift.Validate("16FdfRFVPUwiKAceRSqgEfn1tmB4sVUmLh", "btc")
+
+if err != nil {
+    panic(err)
+}
 
 fmt.Println("Address is: ", address.Valid)
 fmt.Println("Error: ",address.Error)
@@ -207,7 +254,11 @@ new := shapeshift.New{
 		FromAddress: "0xcf2f204aC8D7714990912fA422874371c001217D",
 	}
 
-response := new.Shift()
+response, err := new.Shift()
+
+if err != nil {
+    panic(err)
+}
 
 fmt.Println("Send To Address: ", response.SendTo)
 fmt.Println("Send Type: ", response.SendType)
@@ -228,7 +279,11 @@ info := shapeshift.Receipt{
 		TransactionID: "owkdwodkkwokdwdw",
 	}
 
-response := info.Send();
+response, err := info.Send();
+
+if err != nil {
+    panic(err)
+}
 
 fmt.Println(response)
 ```
@@ -244,7 +299,11 @@ new := shapeshift.New{
 		FromAddress: "0xcf2f204aC8D7714990912fA422874371c001217D",
 	}
 
-response := new.FixedShift()
+response, err := new.FixedShift()
+
+if err != nil {
+    panic(err)
+}
 
 fmt.Println("Pair: ", response.Pair)
 fmt.Println("Quoted Rate: ", response.QuotedRate)
@@ -263,7 +322,12 @@ old := shapeshift.Address{
 		Id: newSendToAddress,
 	}
 
-	response := old.Cancel()
+	response, err := old.Cancel()
+
+	if err != nil {
+        panic(err)
+    }
+
 ```
 ***
 
@@ -277,7 +341,11 @@ api := shapeshift.API{
 		Key: "oskdfoijsfuhsdhufhewhuf",
 	   }
 
-list := api.ListTransactions()
+list, err := api.ListTransactions()
+
+if err != nil {
+    panic(err)
+}
 
 for _,v := range list.Transactions {
     fmt.Println("Input: ",v.InputAddress)
@@ -295,7 +363,11 @@ api := shapeshift.API{
 		Address: "1JP7QWC9GbpKEHSvefygWk5woFy9xeQHKc",
 	}
 
-list := api.ListTransactions()
+list, err := api.ListTransactions()
+
+if err != nil {
+    panic(err)
+}
 
 for _,v := range list.Transactions {
     fmt.Println("Input: ",v.InputAddress)
