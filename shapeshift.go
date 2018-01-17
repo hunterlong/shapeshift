@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"strconv"
 )
@@ -242,6 +243,32 @@ func TimeRemaining(addr string) (*TimeRemainingResponse, error) {
 	var g TimeRemainingResponse
 	err = json.Unmarshal(r, &g)
 	return &g, err
+}
+
+func CoinsAsList() ([]Coin, error) {
+	var coins []Coin
+	r, err := DoHttp("GET", "getcoins", "")
+	if err != nil {
+		return nil, err
+	}
+
+	// User json.RawMessage to delay marshalling to support arbitrary top level keys
+	var coinmap map[string]*json.RawMessage
+	if err := json.Unmarshal(r, &coinmap); err != nil {
+		return coins, err
+	}
+
+	for _, coinJSON := range coinmap {
+		var c Coin
+		err := json.Unmarshal([]byte(*coinJSON), &c)
+		if err != nil {
+			log.Println("Error unmarshalling coin:", err)
+			continue
+		}
+		coins = append(coins, c)
+	}
+
+	return coins, nil
 }
 
 func Coins() (*CoinsResponse, error) {
