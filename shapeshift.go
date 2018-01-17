@@ -252,7 +252,7 @@ func CoinsAsList() ([]Coin, error) {
 		return nil, err
 	}
 
-	// User json.RawMessage to delay marshalling to support arbitrary top level keys
+	// Use json.RawMessage to delay marshalling to support arbitrary top level keys
 	var coinmap map[string]*json.RawMessage
 	if err := json.Unmarshal(r, &coinmap); err != nil {
 		return coins, err

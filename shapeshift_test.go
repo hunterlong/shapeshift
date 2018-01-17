@@ -132,6 +132,18 @@ func TestDepositStatus(t *testing.T) {
 
 }
 
+func TestGetCoinsAsList(t *testing.T) {
+
+	coins, err := CoinsAsList()
+	if err != nil || len(coins) == 0 {
+		t.Fail()
+	}
+
+	t.Log("Coin: ", coins[0].Name)
+	t.Log("Status: ", coins[0].Status)
+
+}
+
 func TestGetSupportedCoins(t *testing.T) {
 
 	coins, err := Coins()
