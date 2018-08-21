@@ -3,6 +3,7 @@ package shapeshift
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"io/ioutil"
 	"net/http"
 	"strconv"
@@ -39,7 +40,7 @@ type LimitResponse struct {
 
 type MarketInfoResponse struct {
 	Pair     string  `json:"pair,omitempty"`
-	Rate     float64 `json:"rate,omitempty"`
+	Rate     float64 `json:"rate,string,omitempty"`
 	Limit    float64 `json:"limit,omitempty"`
 	Min      float64 `json:"min,omitempty"`
 	MinerFee float64 `json:"minerFee,omitempty"`
@@ -204,6 +205,16 @@ func (p Pair) GetLimits() (float64, error) {
 	return ToFloat(g.Limit), err
 }
 
+func MarketInfo() ([]MarketInfoResponse, error) {
+	r, err := DoHttp("GET", "marketinfo", "")
+	if err != nil {
+		return nil, err
+	}
+	var arr []MarketInfoResponse
+	err = json.Unmarshal(r, &arr)
+	return arr, err
+}
+
 func (p Pair) GetInfo() (*MarketInfoResponse, error) {
 	r, err := DoHttp("GET", "marketinfo", p.Name)
 	if err != nil {
@@ -242,6 +253,32 @@ func TimeRemaining(addr string) (*TimeRemainingResponse, error) {
 	var g TimeRemainingResponse
 	err = json.Unmarshal(r, &g)
 	return &g, err
+}
+
+func CoinsAsList() ([]Coin, error) {
+	var coins []Coin
+	r, err := DoHttp("GET", "getcoins", "")
+	if err != nil {
+		return nil, err
+	}
+
+	// Use json.RawMessage to delay marshalling to support arbitrary top level keys
+	var coinmap map[string]*json.RawMessage
+	if err := json.Unmarshal(r, &coinmap); err != nil {
+		return coins, err
+	}
+
+	for _, coinJSON := range coinmap {
+		var c Coin
+		err := json.Unmarshal([]byte(*coinJSON), &c)
+		if err != nil {
+			//log.Println("Error unmarshalling coin:", err)
+			continue
+		}
+		coins = append(coins, c)
+	}
+
+	return coins, nil
 }
 
 func Coins() (*CoinsResponse, error) {
@@ -331,6 +368,9 @@ func DoPostHttp(method string, apimethod string, data interface{}) ([]byte, erro
 	resp, err := client.Do(req)
 	if err != nil {
 		return nil, err
+	}
+	if resp.StatusCode != 200 {
+		return nil, errors.New("There was an error creating your order, Please try again later")
 	}
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
